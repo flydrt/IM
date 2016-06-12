@@ -6,12 +6,14 @@ from models import User
 
 
 class RegisterForm(Form):
-    email = StringField('Email', validators=[DataRequired(), Length(1, 64), Email()])
+    email = StringField('Email', validators=[DataRequired(), Length(1, 64), Email()], render_kw={"placeholder": "email"})
     username = StringField('Username', validators=[DataRequired(), Length(1, 32),
                                                    Regexp('^[A-Za-z][A-Za-z0-9_]*$', 0,
-                                                          'Only letters, numbers or underscores!')])
-    password = PasswordField('Password', validators=[DataRequired(), EqualTo('password2', message='Different passwords!')])
-    password2 = PasswordField('Confirm password', validators=[DataRequired()])
+                                                          'Only letters, numbers or underscores!')],
+                           render_kw={"placeholder": "username"})
+    password = PasswordField('Password', validators=[DataRequired(), EqualTo('password2', message='Different passwords!')],
+                             render_kw={"placeholder": "password"})
+    password2 = PasswordField('Confirm password', validators=[DataRequired()], render_kw={"placeholder": "confirm password"})
     submit = SubmitField('Register')
 
     def validate_email(self, field):
@@ -28,3 +30,9 @@ class LoginForm(Form):
     password = PasswordField('Password', validators=[DataRequired()])
     remember_me = BooleanField('Keep me logged in')
     submit = SubmitField('Login')
+
+
+class ProfileForm(Form):
+    signature = StringField('Signature')
+    introduction = StringField('Introduction')
+    submit = SubmitField('Save')

@@ -1,8 +1,8 @@
 from flask import render_template, redirect, request, url_for, flash
-from flask_login import login_required, login_user, logout_user
+from flask_login import login_required, login_user, logout_user, current_user
 from app import app, db
 from models import User
-from forms import LoginForm, RegisterForm
+from forms import LoginForm, RegisterForm, ProfileForm
 
 
 @app.route('/')
@@ -46,3 +46,25 @@ def register():
         flash('Register success!')
         return redirect(url_for('login'))
     return render_template('register.html', form=form)
+
+
+@app.route('/profile')
+@login_required
+def profile():
+    return render_template('profile.html', user=current_user)
+
+
+@app.route('/edit-profile', methods=['GET', 'POST'])
+@login_required
+def edit_profile():
+    form = ProfileForm()
+    if form.validate_on_submit():
+        current_user.signature = form.signature.data
+        current_user.introduction = form.introduction.data
+        db.session.add(current_user)
+        db.session.commit()
+        flash('Your changes have been save')
+        return redirect(url_for('profile'))
+    form.signature.data = current_user.signature
+    form.introduction.data = current_user.introduction
+    return render_template('edit_profile.html', form=form)
