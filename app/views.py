@@ -110,6 +110,16 @@ def add_contact(username):
     return redirect(url_for('index'))
 
 
+@app.route('/list')
+@login_required
+def list():
+    list = []
+    for friend in Friend.query.filter_by(uid=current_user.id).all():
+        user = User.query.filter_by(id=friend.fid).first()
+        list.append(user.username)
+    return render_template('list.html', list=list)
+
+
 @app.route('/chat')
 def chat():
     return render_template('chat.html')
