@@ -36,3 +36,11 @@ class ProfileForm(Form):
     signature = StringField('Signature')
     introduction = StringField('Introduction')
     submit = SubmitField('Save')
+
+
+class SearchForm(Form):
+    username = StringField('Enter username to search the contact',
+                           validators=[DataRequired(), Length(1, 32),
+                                       Regexp('^[A-Za-z][A-Za-z0-9_]*$', 0, 'Only letters, numbers or underscores!')],
+                           render_kw={"placeholder": "username"})
+    submit = SubmitField('Search')

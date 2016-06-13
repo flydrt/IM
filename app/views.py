@@ -1,8 +1,8 @@
 from flask import render_template, redirect, request, url_for, flash
 from flask_login import login_required, login_user, logout_user, current_user
 from app import app, db
-from models import User
-from forms import LoginForm, RegisterForm, ProfileForm
+from models import User, Friend, Message, Group
+from forms import LoginForm, RegisterForm, ProfileForm, SearchForm
 
 
 @app.route('/')
@@ -62,6 +62,52 @@ def edit_profile():
     form.signature.data = current_user.signature
     form.introduction.data = current_user.introduction
     return render_template('edit_profile.html', form=form)
+
+
+@app.route('/search', methods=['GET', 'POST'])
+@login_required
+def search():
+    form = SearchForm()
+    if form.validate_on_submit():
+        user = User.query.filter_by(username=form.username.data).first()
+        if user is not None:
+            return redirect(url_for('add', username=user.username))
+        flash('The user does not exist!')
+    return render_template('search.html', form=form)
+
+
+@app.route('/add/<username>')
+@login_required
+def add(username):
+    user = User.query.filter_by(username=username).first()
+    if user is None:
+        flash('The user does not exist!')
+        return redirect(url_for('index'))
+    return render_template('add.html', user=user)
+
+
+@app.route('/add-contact/<username>')
+@login_required
+def add_contact(username):
+    user = User.query.filter_by(username=username).first()
+    if user is None:
+        flash('The user does not exist!')
+        return redirect(url_for('search'))
+    if username == current_user.username:
+        flash('Can not add yourself!')
+        return redirect(url_for('search'))
+
+    friend = Friend.query.filter_by(uid=current_user.id, fid=user.id).first()
+    if friend is not None:
+        flash('You have already added the contact!')
+        return redirect(url_for('search'))
+    friend = Friend(uid=current_user.id, fid=user.id)
+    friend2 = Friend(uid=user.id, fid=current_user.id)
+    db.session.add(friend)
+    db.session.add(friend2)
+    db.session.commit()
+    flash('Add success!')
+    return redirect(url_for('index'))
 
 
 @app.route('/chat')
