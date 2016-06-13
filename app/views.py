@@ -120,6 +120,28 @@ def list():
     return render_template('list.html', list=list)
 
 
-@app.route('/chat')
-def chat():
-    return render_template('chat.html')
+@app.route('/chat/<name>')
+@login_required
+def chat(name):
+    friend = User.query.filter_by(username=name).first()
+    if friend is None:
+        flash('The user does not exist!')
+        return redirect(url_for('list'))
+
+    result = Friend.query.filter_by(uid=current_user.id, fid=friend.id).first()
+    if result is None:
+        flash('The user is not your friend!')
+        return redirect(url_for('list'))
+
+    set_room_map(current_user.id, friend.id)
+    return render_template('chat.html', user=current_user, friend=friend)
+
+
+roomMap = {}
+
+
+def set_room_map(id1, id2):
+    if id1 < id2:
+        roomMap[id1] = str(id1) + str(id2)
+    else:
+        roomMap[id1] = str(id2) + str(id1)

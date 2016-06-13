@@ -2,32 +2,44 @@
 
 {% block title %}Chat{% endblock %}
 
+{% block scripts %}
+{{ super() }}
+<script type="text/javascript" src="//code.jquery.com/jquery-1.4.2.min.js"></script>
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min.js"></script>
+<script type="text/javascript" charset="utf-8">
+    var socket = io.connect('http://' + document.domain + ':' + location.port);
+    var userName = document.getElementById('userName').innerHTML;
+    var friendName = document.getElementById('friendName').innerHTML;
+    socket.on("connect", function () {
+        socket.emit('join');
+    });
+    socket.on("message", function (message) {
+        refreshMessages(message);
+{#        if (message.from === userName && message.to === friendName#}
+{#                || message.from === friendName && message.to === userName)#}
+    });
+    function refreshMessages(message) {
+        $(".media-list").append('<li class="media"><div class="media-body"><div class="media"><div class="media-body">'
+                + message.data + '<br/><small class="text-muted">' + message.from + ' | ' + message.to
+                + '</small><hr/></div></div></div></li>');
+    }
+    $(document).ready(function() {
+        $('#messageText').keypress(function (e) {
+            var code = e.keyCode || e.which;
+            if (code == 13) {
+                var text = $('#messageText').val();
+                $('#messageText').val('');
+                socket.emit('message', {'data': text, 'from': userName, 'to': friendName});
+            }
+        });
+    });
+</script>
+{% endblock %}
+
 {% block page_content %}
-<!--<div class="widget-content nopadding">-->
-    <!--<div class="chat-content panel-left">-->
-        <!--<div class="chat-messages" id="chat-messages">-->
-            <!--<div id="chat-messages-inner">-->
-                <!--<p id="msg-1" class="user-neytiri" style="display: block;">-->
-                    <!--<img src="img/demo/av2.jpg" alt="">-->
-                    <!--<span class="msg-block"><strong>Neytiri</strong> <span class="time">- 08:46</span>-->
-                        <!--<span class="msg">I have a problem. My computer not work!</span>-->
-                    <!--</span>-->
-                <!--</p>-->
-                <!--<p id="msg-2" class="user-cartoon-man" style="display: block;">-->
-                    <!--<img src="img/demo/av3.jpg" alt="">-->
-                    <!--<span class="msg-block">-->
-                        <!--<strong>Cartoon Man</strong> <span class="time">- 08:46</span>-->
-                        <!--<span class="msg">Turn off and turn on your computer then see result.</span>-->
-                    <!--</span>-->
-                <!--</p>-->
-                <!--<p class="offline" id="msg-3" style="display: block;"><span>User Neytiri left the chat</span></p>-->
-            <!--</div>-->
-        <!--</div>-->
-    <!--</div>-->
-<!--</div>-->
 <div class="container">
     <div class="row">
-        <h3 class="text-center">Realtime Chat Application with Flask, SocketIO</h3>
+        <h3 class="text-center" id="friendName">{{ friend.username }}</h3>
         <br/><br/>
 
         <div class="col-md-12">

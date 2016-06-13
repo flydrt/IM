@@ -2,6 +2,7 @@ from flask import Flask
 from flask_bootstrap import Bootstrap
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
+from flask_socketio import SocketIO
 
 app = Flask(__name__)
 bootstrap = Bootstrap(app)
@@ -14,5 +15,8 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://bs:bs123456@localhost/bsdb'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 db = SQLAlchemy(app)
 
+socketio = SocketIO(app)
+
 import models
 import views
+import events

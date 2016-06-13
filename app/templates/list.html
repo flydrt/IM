@@ -6,7 +6,9 @@
 <div class="page-header">
 	<h1>Friend List</h1>
     {% for name in list %}
-        <p>{{ name }}</p>
+        <a href="{{ url_for('chat', name=name) }}">
+            {{ name }}
+        </a>
     {% endfor %}
 </div>
 {% endblock %}
