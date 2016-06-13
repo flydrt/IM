@@ -11,18 +11,24 @@
     var userName = document.getElementById('userName').innerHTML;
     var friendName = document.getElementById('friendName').innerHTML;
     socket.on("connect", function () {
-        socket.emit('join');
+        socket.emit('join', {'from': userName, 'to': friendName});
     });
     socket.on("message", function (message) {
-        refreshMessages(message);
-{#        if (message.from === userName && message.to === friendName#}
-{#                || message.from === friendName && message.to === userName)#}
+        if (message.flag == 1)
+            refreshMessages(message);
+        else if (message.from === friendName && message.to === userName)
+            refreshMessages(message);
     });
     function refreshMessages(message) {
         $(".media-list").append('<li class="media"><div class="media-body"><div class="media"><div class="media-body">'
                 + message.data + '<br/><small class="text-muted">' + message.from + ' | ' + message.to
                 + '</small><hr/></div></div></div></li>');
     }
+
+    window.onbeforeunload = function (e) {
+        socket.emit('leave');
+    };
+
     $(document).ready(function() {
         $('#messageText').keypress(function (e) {
             var code = e.keyCode || e.which;
