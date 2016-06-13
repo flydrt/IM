@@ -10,12 +10,6 @@ def index():
     return render_template('index.html')
 
 
-@app.route('/secret')
-@login_required
-def secret():
-    return 'Only authenticated users are allowed!'
-
-
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
@@ -68,3 +62,8 @@ def edit_profile():
     form.signature.data = current_user.signature
     form.introduction.data = current_user.introduction
     return render_template('edit_profile.html', form=form)
+
+
+@app.route('/chat')
+def chat():
+    return render_template('chat.html')

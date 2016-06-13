@@ -34,3 +34,29 @@ class User(UserMixin, db.Model):
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
+
+
+class Friend(db.Model):
+    __tablename__ = 'friends'
+    id = db.Column(db.Integer, primary_key=True)
+    uid = db.Column(db.Integer, db.ForeignKey('users.id'))
+    fid = db.Column(db.Integer, db.ForeignKey('users.id'))
+    gid = db.Column(db.Integer, db.ForeignKey('groups.id'))
+    friend_name = db.Column(db.String(32))
+
+
+class Group(db.Model):
+    __tablename__ = 'groups'
+    id = db.Column(db.Integer, primary_key=True)
+    uid = db.Column(db.Integer, db.ForeignKey('users.id'))
+    group_name = db.Column(db.String(32))
+
+
+class Message(db.Model):
+    __tablename__ = 'messages'
+    id = db.Column(db.Integer, primary_key=True)
+    from_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    to_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    message = db.Column(db.Text)
+    time = db.Column(db.DateTime)
+    status = db.Column(db.Boolean)

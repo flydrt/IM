@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block title %}Chat{% endblock %}
+
+{% block page_content %}
+<!--<div class="widget-content nopadding">-->
+    <!--<div class="chat-content panel-left">-->
+        <!--<div class="chat-messages" id="chat-messages">-->
+            <!--<div id="chat-messages-inner">-->
+                <!--<p id="msg-1" class="user-neytiri" style="display: block;">-->
+                    <!--<img src="img/demo/av2.jpg" alt="">-->
+                    <!--<span class="msg-block"><strong>Neytiri</strong> <span class="time">- 08:46</span>-->
+                        <!--<span class="msg">I have a problem. My computer not work!</span>-->
+                    <!--</span>-->
+                <!--</p>-->
+                <!--<p id="msg-2" class="user-cartoon-man" style="display: block;">-->
+                    <!--<img src="img/demo/av3.jpg" alt="">-->
+                    <!--<span class="msg-block">-->
+                        <!--<strong>Cartoon Man</strong> <span class="time">- 08:46</span>-->
+                        <!--<span class="msg">Turn off and turn on your computer then see result.</span>-->
+                    <!--</span>-->
+                <!--</p>-->
+                <!--<p class="offline" id="msg-3" style="display: block;"><span>User Neytiri left the chat</span></p>-->
+            <!--</div>-->
+        <!--</div>-->
+    <!--</div>-->
+<!--</div>-->
+<div class="container">
+    <div class="row">
+        <h3 class="text-center">Realtime Chat Application with Flask, SocketIO</h3>
+        <br/><br/>
+
+        <div class="col-md-12">
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    <strong><span class="glyphicon glyphicon-list"></span> Chat History</strong>
+                </div>
+                <div class="panel-body fixed-panel">
+                    <ul class="media-list">
+                    </ul>
+                </div>
+                <div class="panel-footer">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Enter Message" id="messageText" autofocus/>
+                        <span class="input-group-btn">
+                            <button class="btn btn-info" type="button" id="sendMessage">
+                                SEND <span class="glyphicon glyphicon-send"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
