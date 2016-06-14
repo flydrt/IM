@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block title %}Contacts{% endblock %}
+
+{% block page_content %}
+<div class="page-header">
+	<h2>
+        Contacts
+        <a href="{{ url_for('manage_group') }}" class="pull-right" style="color: #222"><span class='glyphicon glyphicon-cog'></span></a>
+    </h2>
+
+</div>
+<div class="panel-group col-md-3">
+    {% for group in groups %}
+    <div class="panel" style="background-color: #222; color: #777777">
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <a data-toggle="collapse" href="#{{ group }}">{{ group }}</a>
+                <a href="{{ url_for('manage_contacts', group_name=group) }}" class="pull-right" style="color: #777777"><span class='glyphicon glyphicon-cog'></span></a>
+            </h4>
+        </div>
+        <div id="{{ group }}" class="panel-collapse collapse">
+            {% for user in users[group] %}
+            <ul class="list-group">
+                <li class="list-group-item">
+                    <a href="{{ url_for('chat', name=user) }}" style="color: #222">{{ user }}</a>
+                    <a href="{{ url_for('contacts_profile', name=user) }}" class="pull-right" style="color: #222"><span class='glyphicon glyphicon-cog'></span></a>
+                </li>
+            </ul>
+            {% endfor %}
+        </div>
+    </div>
+    {% endfor %}
+    {% if others %}
+    <div class="panel" style="background-color: #222; color: #777777">
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <a data-toggle="collapse" href="#Others">Others</a>
+            </h4>
+        </div>
+        <div id="Others" class="panel-collapse collapse">
+            {% for other in others %}
+            <ul class="list-group">
+                <li class="list-group-item">
+                    <a href="{{ url_for('chat',name=other) }}" style="color: #222">{{ other }}</a>
+                    <a href="{{ url_for('contacts_profile', name=other) }}" class="pull-right" style="color: #222"><span class='glyphicon glyphicon-cog'></span></a>
+                </li>
+            </ul>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

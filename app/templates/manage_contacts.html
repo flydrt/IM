@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}Manage Contacts{% endblock %}
+
+{% block page_content %}
+<div class="page-header">
+	<h2>Manage Contacts</h2>
+</div>
+<div>
+    <h3>In {{ group_name }}</h3>
+    {% for contact in in_group %}
+    <a href="{{ url_for('delete_member', group_name=group_name, name=contact) }}">{{ contact }}</a>
+    {% endfor %}
+</div>
+<div>
+    <h3>Out of {{ group_name }}</h3>
+    {% for contact in out_group %}
+    <a href="{{ url_for('add_member', group_name=group_name, name=contact) }}">{{ contact }}</a>
+    {% endfor %}
+</div>
+{% endblock %}

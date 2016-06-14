@@ -44,3 +44,12 @@ class SearchForm(Form):
                                        Regexp('^[A-Za-z][A-Za-z0-9_]*$', 0, 'Only letters, numbers or underscores!')],
                            render_kw={"placeholder": "username"})
     submit = SubmitField('Search')
+
+
+class ManageGroupForm(Form):
+    group_name = StringField('Enter group name to manage the group',
+                             validators=[DataRequired(), Length(1, 32),
+                                         Regexp('^[A-Za-z][A-Za-z0-9_]*$', 0, 'Only letters, numbers or underscores!')],
+                             render_kw={"placeholder": "group name"})
+    manage = BooleanField('Not choose for add, choose for delete')
+    submit = SubmitField('Manage')
