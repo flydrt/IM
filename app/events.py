@@ -18,7 +18,8 @@ def on_join(message):
                 msg.status = True
                 db.session.add(msg)
                 db.session.commit()
-                emit('message', {'data': msg.message, 'from': message['to'], 'to': message['from'], 'flag': 0}, room=room)
+                emit('message', {'data': msg.message, 'from': message['to'], 'to': message['from'],
+                                 'datetime': msg.datetime, 'flag': 0}, room=room)
 
 
 @socketio.on('leave')
@@ -31,7 +32,7 @@ def on_leave():
 def chat_message(message):
     user = User.query.filter_by(username=message['from']).first()
     friend = User.query.filter_by(username=message['to']).first()
-    msg = Message(from_id=user.id, to_id=friend.id, message=message['data'], status=0)
+    msg = Message(from_id=user.id, to_id=friend.id, message=message['data'], datetime=message['datetime'], status=0)
 
     room = roomMap[current_user.id]
     for key in roomMap:
@@ -40,4 +41,5 @@ def chat_message(message):
 
     db.session.add(msg)
     db.session.commit()
-    emit('message', {'data': message['data'], 'from': message['from'], 'to': message['to'], 'flag': 1}, room=room)
+    emit('message', {'data': message['data'], 'from': message['from'], 'to': message['to'],
+                     'datetime': message['datetime'], 'flag': 1}, room=room)

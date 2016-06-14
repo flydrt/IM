@@ -2,6 +2,7 @@ from app import db
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 from app import login_manager
+import datetime
 
 
 class User(UserMixin, db.Model):
@@ -58,5 +59,5 @@ class Message(db.Model):
     from_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     to_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     message = db.Column(db.Text)
-    time = db.Column(db.DateTime)
+    datetime = db.Column(db.String(32))
     status = db.Column(db.Boolean)

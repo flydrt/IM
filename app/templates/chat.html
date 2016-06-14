@@ -10,6 +10,7 @@
     var socket = io.connect('http://' + document.domain + ':' + location.port);
     var userName = document.getElementById('userName').innerHTML;
     var friendName = document.getElementById('friendName').innerHTML;
+
     socket.on("connect", function () {
         socket.emit('join', {'from': userName, 'to': friendName});
     });
@@ -19,11 +20,13 @@
         else if (message.from === friendName && message.to === userName)
             refreshMessages(message);
     });
+
     function refreshMessages(message) {
         $(".media-list").append('<li class="media"><div class="media-body"><div class="media"><div class="media-body">'
-                + message.data + '<br/><small class="text-muted">' + message.from + ' | ' + message.to
+                + message.data + '<br/><small class="text-muted">' + message.from + ' | ' + message.datetime
                 + '</small><hr/></div></div></div></li>');
     }
+
 
     window.onbeforeunload = function (e) {
         socket.emit('leave');
@@ -33,9 +36,16 @@
         $('#messageText').keypress(function (e) {
             var code = e.keyCode || e.which;
             if (code == 13) {
+                var currentdate = new Date();
+                var datetime = currentdate.getFullYear() + "-"
+                        + (currentdate.getMonth() + 1) + "-"
+                        + currentdate.getDate() + "   "
+                        + currentdate.getHours() + ":"
+                        + currentdate.getMinutes() + ":"
+                        + currentdate.getSeconds();
                 var text = $('#messageText').val();
                 $('#messageText').val('');
-                socket.emit('message', {'data': text, 'from': userName, 'to': friendName});
+                socket.emit('message', {'data': text, 'from': userName, 'to': friendName, 'datetime': datetime});
             }
         });
     });
@@ -45,27 +55,21 @@
 {% block page_content %}
 <div class="container">
     <div class="row">
-        <h3 class="text-center" id="friendName">{{ friend.username }}</h3>
-        <br/><br/>
+        <h4 class="text-center" id="friendName">{{ friend.username }}</h4>
+        <br/>
 
         <div class="col-md-12">
-            <div class="panel panel-info">
-                <div class="panel-heading">
-                    <strong><span class="glyphicon glyphicon-list"></span> Chat History</strong>
+            <div class="panel panel-primary" style="border-color: #222">
+                <div class="panel-heading" style="background-color: #222; color: #777777">
+                    <strong>Chat with {{ friend.username }}</strong>
                 </div>
-                <div class="panel-body fixed-panel">
+                <div class="panel-body" style="min-height: 500px; max-height: 500px; overflow-y: scroll;">
                     <ul class="media-list">
                     </ul>
                 </div>
-                <div class="panel-footer">
-                    <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Enter Message" id="messageText" autofocus/>
-                        <span class="input-group-btn">
-                            <button class="btn btn-info" type="button" id="sendMessage">
-                                SEND <span class="glyphicon glyphicon-send"></span>
-                            </button>
-                        </span>
-                    </div>
+                <div class="panel-footer" style="background-color: white">
+                    <input type="text" class="form-control" placeholder="Enter Message" id="messageText" autofocus
+                            style="border-color: #222;"/>
                 </div>
             </div>
         </div>
