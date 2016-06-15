@@ -2,7 +2,6 @@ from app import db
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 from app import login_manager
-import datetime
 
 
 class User(UserMixin, db.Model):
@@ -43,7 +42,6 @@ class Friend(db.Model):
     uid = db.Column(db.Integer, db.ForeignKey('users.id'))
     fid = db.Column(db.Integer, db.ForeignKey('users.id'))
     gid = db.Column(db.Integer, db.ForeignKey('groups.id'))
-    friend_name = db.Column(db.String(32))
 
 
 class Group(db.Model):

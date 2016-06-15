@@ -1,7 +1,7 @@
 from flask import render_template, redirect, request, url_for, flash
 from flask_login import login_required, login_user, logout_user, current_user
 from app import app, db
-from models import User, Friend, Message, Group
+from models import User, Friend, Group
 from forms import LoginForm, RegisterForm, ProfileForm, SearchForm, ManageGroupForm
 
 
@@ -53,14 +53,36 @@ def profile():
 def edit_profile():
     form = ProfileForm()
     if form.validate_on_submit():
+        current_user.nickname = form.nickname.data
+        if form.gender.data == '1':
+            current_user.gender = False
+        elif form.gender.data == '2':
+            current_user.gender = True
+        else:
+            current_user.gender = None
+        current_user.birthday = form.birthday.data
         current_user.signature = form.signature.data
         current_user.introduction = form.introduction.data
+        current_user.hometown = form.hometown.data
+        current_user.contact_email = form.contact_email.data
+        current_user.telephone = form.telephone.data
         db.session.add(current_user)
         db.session.commit()
         flash('Your changes have been save')
         return redirect(url_for('profile'))
+    form.nickname.data = current_user.nickname
+    if current_user.gender is False:
+        form.gender.data = '1'
+    elif current_user.gender is True:
+        form.gender.data = '2'
+    else:
+        form.gender.data = '0'
+    form.birthday.data = current_user.birthday
     form.signature.data = current_user.signature
     form.introduction.data = current_user.introduction
+    form.hometown.data = current_user.hometown
+    form.contact_email.data = current_user.contact_email
+    form.telephone.data = current_user.telephone
     return render_template('edit_profile.html', form=form)
 
 
@@ -107,7 +129,7 @@ def add_contact(username):
     db.session.add(friend2)
     db.session.commit()
     flash('Add success!')
-    return redirect(url_for('index'))
+    return redirect(url_for('contacts'))
 
 
 @app.route('/contacts')

@@ -1,6 +1,6 @@
 from flask_wtf import Form
-from wtforms import StringField, PasswordField, BooleanField, SubmitField
-from wtforms.validators import DataRequired, Length, Email, Regexp, EqualTo
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, SelectField, DateField
+from wtforms.validators import DataRequired, Length, Email, Regexp, EqualTo, Optional
 from wtforms import ValidationError
 from models import User
 
@@ -26,15 +26,23 @@ class RegisterForm(Form):
 
 
 class LoginForm(Form):
-    email = StringField('Email', validators=[DataRequired(), Length(1, 64), Email()])
-    password = PasswordField('Password', validators=[DataRequired()])
+    email = StringField('Email', validators=[DataRequired(), Length(1, 64), Email()], render_kw={"placeholder": "email"})
+    password = PasswordField('Password', validators=[DataRequired()], render_kw={"placeholder": "password"})
     remember_me = BooleanField('Keep me logged in')
     submit = SubmitField('Login')
 
 
 class ProfileForm(Form):
+    nickname = StringField('Nickname', validators=[Length(0, 32), Regexp('^[A-Za-z][A-Za-z0-9_]*$', 0,
+                                                                         'Only letters, numbers or underscores!'),
+                                                   Optional()])
+    gender = SelectField('Gender', choices=[('0', 'Unknown'), ('1', 'Male'), ('2', 'Female')])
+    birthday = DateField('Birthday (Format: year-month-day, e.g. 2016-6-15)', validators=[Optional()])
     signature = StringField('Signature')
     introduction = StringField('Introduction')
+    hometown = StringField('Hometown', validators=[Length(0, 64), Optional()])
+    contact_email = StringField('Contact Email', validators=[Length(0, 64), Email(), Optional()])
+    telephone = StringField('Telephone', validators=[Length(0, 32), Optional()])
     submit = SubmitField('Save')
 
 

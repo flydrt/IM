@@ -4,20 +4,21 @@
 
 {% block page_content %}
 <div class="page-header">
-	<h1>{{ user.username }}</h1>
-    <p>{{ user.email }}</p>
-    <p>Signature: {% if user.signature %} {{ user.signature }} {% endif %}</p>
-    <p>Introduction: {% if user.introduction %} {{ user.introduction }} {% endif %}</p>
+	<h2>
+        {{ user.username }}
+        <a href="{{ url_for('add_contact', username=user.username) }}" class="pull-right" style="color: #222"><span class='glyphicon glyphicon-plus'></span></a>
+    </h2>
 </div>
 <div>
-    <form action="{{ url_for('add_contact', username=user.username) }}">
-        <button class="btn btn-info" type="submit">Add</button>
-    </form>
-</div>
-<br />
-<div>
-    <form action="{{ url_for('search') }}">
-        <button class="btn btn-info" type="submit">Return</button>
-    </form>
+    <h4>[Nickname] <span style="color: #777777">{% if user.nickname %} {{ user.nickname }} {% endif %}</span></h4><br />
+    <h4>[Gender] <span style="color: #777777">
+        {% if user.gender == 0 %} Male {% elif user.gender == 1 %} Female {% else %} Unknown {% endif %}
+    </span></h4><br />
+    <h4>[Birthday] <span style="color: #777777">{% if user.birthday %} {{ user.birthday }} {% endif %}</span></h4><br />
+    <h4>[Signature] <span style="color: #777777">{% if user.signature %} {{ user.signature }} {% endif %}</span></h4><br />
+    <h4>[Introduction] <span style="color: #777777">{% if user.introduction %} {{ user.introduction }} {% endif %}</span></h4><br />
+    <h4>[Hometown] <span style="color: #777777">{% if user.hometown %} {{ user.hometown }} {% endif %}</span></h4><br />
+    <h4>[Contact Email] <span style="color: #777777">{% if user.contact_email %} {{ user.contact_email }} {% endif %}</span></h4><br />
+    <h4>[Telephone] <span style="color: #777777">{% if user.telephone %} {{ user.telephone }} {% endif %}</span></h4><br />
 </div>
 {% endblock %}
