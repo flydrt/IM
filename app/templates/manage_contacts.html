@@ -6,16 +6,20 @@
 <div class="page-header">
 	<h2>Manage Contacts</h2>
 </div>
-<div>
-    <h3>In {{ group_name }}</h3>
+<div class="col-md-4">
+    <h3>In Group [ {{ group_name }} ]</h3>
     {% for contact in in_group %}
-    <a href="{{ url_for('delete_member', group_name=group_name, name=contact) }}">{{ contact }}</a>
+    <form action="{{ url_for('delete_member', group_name=group_name, name=contact) }}">
+        <button class="btn btn-info" type="submit" style="background-color: #222222; border-color: #222222; color: #777777">{{ contact }}</button>
+    </form>
     {% endfor %}
 </div>
-<div>
-    <h3>Out of {{ group_name }}</h3>
+<div class="col-md-4">
+    <h3>Out of Group [ {{ group_name }} ]</h3>
     {% for contact in out_group %}
-    <a href="{{ url_for('add_member', group_name=group_name, name=contact) }}">{{ contact }}</a>
+    <form action="{{ url_for('add_member', group_name=group_name, name=contact) }}">
+        <button class="btn btn-info" type="submit" style="background-color: #222222; border-color: #222222; color: #777777">{{ contact }}</button>
+    </form>
     {% endfor %}
 </div>
 {% endblock %}
