@@ -22,9 +22,18 @@
     });
 
     function refreshMessages(message) {
-        $(".media-list").append('<li class="media"><div class="media-body"><div class="media"><div class="media-body">'
-                + message.data + '<br/><small class="text-muted">' + message.from + ' | ' + message.datetime
-                + '</small><hr/></div></div></div></li>');
+        if (message.from === userName) {
+            $(".media-list").append('<li class="media text-right"><div class="media-body"><div class="media"><div class="media-body">'
+                    + message.data + '<br/><small class="text-muted">' + message.from + ' | ' + message.datetime
+                    + '</small><hr/></div></div></div></li>');
+        }
+        else {
+            $(".media-list").append('<li class="media"><div class="media-body"><div class="media"><div class="media-body">'
+                    + message.data + '<br/><small class="text-muted">' + message.from + ' | ' + message.datetime
+                    + '</small><hr/></div></div></div></li>');
+        }
+        var elem = document.getElementById('chat');
+        elem.scrollTop = elem.scrollHeight;
     }
 
 
@@ -63,7 +72,7 @@
                 <div class="panel-heading" style="background-color: #222; color: #777777">
                     <strong>Chat with {{ friend.username }}</strong>
                 </div>
-                <div class="panel-body" style="min-height: 500px; max-height: 500px; overflow-y: scroll;">
+                <div class="panel-body" style="min-height: 500px; max-height: 500px; overflow-y: scroll;" id="chat">
                     <ul class="media-list">
                     </ul>
                 </div>
