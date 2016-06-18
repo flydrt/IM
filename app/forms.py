@@ -7,13 +7,15 @@ from models import User
 
 class RegisterForm(Form):
     email = StringField('Email', validators=[DataRequired(), Length(1, 64), Email()], render_kw={"placeholder": "email"})
-    username = StringField('Username', validators=[DataRequired(), Length(1, 32),
+    username = StringField('Username', validators=[DataRequired(), Length(6, 32),
                                                    Regexp('^[A-Za-z][A-Za-z0-9_]*$', 0,
                                                           'Only letters, numbers or underscores!')],
                            render_kw={"placeholder": "username"})
-    password = PasswordField('Password', validators=[DataRequired(), EqualTo('password2', message='Different passwords!')],
+    password = PasswordField('Password', validators=[DataRequired(), Length(6, 32),
+                                                     EqualTo('password2', message='Different passwords!')],
                              render_kw={"placeholder": "password"})
-    password2 = PasswordField('Confirm password', validators=[DataRequired()], render_kw={"placeholder": "confirm password"})
+    password2 = PasswordField('Confirm password', validators=[DataRequired(), Length(6, 32)],
+                              render_kw={"placeholder": "confirm password"})
     submit = SubmitField('Register')
 
     def validate_email(self, field):
